@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Nouveau ticket</title>
+</head>
+<body>
+<h1>Créer un ticket </h1>
+
+<form action="/tickets" method="post">
+  <div>
+    <label>Titre :</label>
+    <input type="text" name="title">
+  </div>
+
+  <div>
+    <label>Description :</label>
+    <textarea name="description"></textarea>
+  </div>
+
+  <div>
+    <label>Email du demandeur :</label>
+    <input type="email" name="requesterEmail">
+  </div>
+
+  <button type="submit">Créer</button>
+</form>
+
+<a href="/tickets">Retour à la liste</a>
+</body>
+</html>

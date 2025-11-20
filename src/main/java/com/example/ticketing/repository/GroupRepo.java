@@ -1,11 +1,9 @@
 package com.example.ticketing.repository;
 
-import com.example.ticketing.domain.User;
+import com.example.ticketing.domain.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-
-public interface UserRepo extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+public interface GroupRepo extends JpaRepository<Group, Long> {
 }

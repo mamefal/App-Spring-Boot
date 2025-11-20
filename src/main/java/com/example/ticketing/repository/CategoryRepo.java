@@ -1,4 +1,4 @@
-package com.example.ticketing.repo;
+package com.example.ticketing.repository;
 
 import com.example.ticketing.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
