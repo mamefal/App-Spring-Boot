@@ -16,12 +16,19 @@
     <th>Status</th>
     <th>Priorité</th>
   </tr>
+
   <tr th:each="t : ${tickets}">
     <td th:text="${t.id}"></td>
-    <td th:text="${t.title}"></td>
+
+    <!-- 👇 lien cliquable vers /tickets/{id} -->
+    <td>
+      <a th:href="@{'/tickets/' + ${t.id}}" th:text="${t.title}"></a>
+    </td>
+
     <td th:text="${t.status}"></td>
     <td th:text="${t.priority}"></td>
   </tr>
 </table>
+
 </body>
 </html>

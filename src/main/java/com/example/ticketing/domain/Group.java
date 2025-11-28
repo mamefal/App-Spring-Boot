@@ -1,6 +1,8 @@
 package com.example.ticketing.domain;
 
 import jakarta.persistence.*;
+import java.util.List;
+import com.example.ticketing.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,4 +19,12 @@ public class Group {
     private String name;
 
     private String description;
+
+    @OneToMany(mappedBy = "group")
+    private List<Ticket> tickets;
+
+    @OneToMany(mappedBy = "group")
+    private List<User> members;
+
+
 }

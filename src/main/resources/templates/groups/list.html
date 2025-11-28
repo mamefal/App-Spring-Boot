@@ -5,9 +5,10 @@
   <title>Groupes</title>
 </head>
 <body>
-<h1>Groupes</h1>
+<h1>Liste des groupes</h1>
 
-<a href="/groups/new">Créer un groupe</a>
+<a href="/groups/new">Nouveau groupe</a>
+<br><br>
 
 <table border="1">
   <tr>
@@ -17,7 +18,10 @@
   </tr>
   <tr th:each="g : ${groups}">
     <td th:text="${g.id}"></td>
-    <td th:text="${g.name}"></td>
+    <td>
+      <a th:href="@{'/groups/' + ${g.id}}"
+         th:text="${g.name}">Nom</a>
+    </td>
     <td th:text="${g.description}"></td>
   </tr>
 </table>

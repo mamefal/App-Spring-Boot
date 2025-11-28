@@ -1,5 +1,7 @@
 package com.example.ticketing.domain;
-import jakarta.persistence.*; import jakarta.validation.constraints.*; import lombok.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
 import java.time.Instant;
 @Entity @Getter @Setter @NoArgsConstructor
 

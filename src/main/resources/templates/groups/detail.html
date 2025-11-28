@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Détails du groupe</title>
 </head>
 <body>
-$END$
+<h1 th:text="${group.name}">Nom du groupe</h1>
+<p th:text="${group.description}">Description</p>
+
+<h2>Membres</h2>
+<table border="1">
+  <tr>
+    <th>Nom</th>
+    <th>Email</th>
+  </tr>
+  <tr th:each="u : ${group.members}">
+    <td th:text="${u.fullName}">Nom</td>
+    <td th:text="${u.email}">Email</td>
+  </tr>
+</table>
+
+<h3>Ajouter un membre existant</h3>
+<form th:action="@{'/groups/' + ${group.id} + '/members'}"
+      method="post">
+  <select name="userId">
+    <option value="">-- Sélectionner un utilisateur --</option>
+    <option th:each="u : ${users}"
+            th:value="${u.id}"
+            th:text="${u.fullName + ' (' + u.email + ')'}">
+    </option>
+  </select>
+  <button type="submit">Ajouter</button>
+</form>
+
+<br>
+<a href="/groups">Retour à la liste des groupes</a>
 </body>
 </html>

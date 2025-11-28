@@ -1,31 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Nouveau ticket</title>
 </head>
 <body>
-<h1>Créer un ticket </h1>
+<h1>Créer un ticket</h1>
 
-<form action="/tickets" method="post">
+<form th:action="@{/tickets}" th:object="${ticketForm}" method="post">
   <div>
     <label>Titre :</label>
-    <input type="text" name="title">
+    <input type="text" th:field="*{title}"/>
   </div>
 
   <div>
     <label>Description :</label>
-    <textarea name="description"></textarea>
+    <textarea th:field="*{description}"></textarea>
   </div>
 
   <div>
     <label>Email du demandeur :</label>
-    <input type="email" name="requesterEmail">
+    <input type="email" th:field="*{requesterEmail}"/>
+  </div>
+
+  <div>
+    <label for="group">Groupe</label>
+    <select id="group" th:field="*{groupId}">
+      <option value="">-- Sélectionner un groupe --</option>
+      <option th:each="g : ${groups}"
+              th:value="${g.id}"
+              th:text="${g.name}">
+      </option>
+    </select>
   </div>
 
   <button type="submit">Créer</button>
 </form>
 
-<a href="/tickets">Retour à la liste</a>
+<a th:href="@{/tickets}">Retour à la liste</a>
 </body>
 </html>

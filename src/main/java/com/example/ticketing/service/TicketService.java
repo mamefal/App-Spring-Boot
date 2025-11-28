@@ -1,60 +1,83 @@
 package com.example.ticketing.service;
 
-import com.example.ticketing.domain.*;
-import com.example.ticketing.repository.*;
-import lombok.RequiredArgsConstructor;
+import com.example.ticketing.domain.Group;
+import com.example.ticketing.domain.Priority;
+import com.example.ticketing.domain.Ticket;
+import com.example.ticketing.domain.User;
+import com.example.ticketing.repository.GroupRepo;
+import com.example.ticketing.repository.TicketRepo;
+import com.example.ticketing.repository.UserRepo;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-@Transactional
 public class TicketService {
 
     private final TicketRepo ticketRepo;
-    private final UserRepo userRepo;
-    private final CategoryRepo categoryRepo;
     private final GroupRepo groupRepo;
+    private final UserRepo userRepo;
 
+    public TicketService(TicketRepo ticketRepo,
+                         GroupRepo groupRepo,
+                         UserRepo userRepo) {
+        this.ticketRepo = ticketRepo;
+        this.groupRepo = groupRepo;
+        this.userRepo = userRepo;
+    }
 
     public List<Ticket> findAll() {
         return ticketRepo.findAll();
     }
 
-    @Transactional
-    public Ticket create(
-            String title,
-            String description,
-            Priority priority,
-            String requesterEmail,
-            Long assigneeId,
-            Long groupId
-    ) {
-        // requester
+    public Ticket getById(Long id) {
+        return ticketRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found: " + id));
+    }
+
+    public Ticket create(String title,
+                         String description,
+                         Priority priority,
+                         String requesterEmail,
+                         Long assigneeId,
+                         Long groupId) {
+
+        Ticket ticket = new Ticket();
+        ticket.setTitle(title);
+        ticket.setDescription(description);
+        ticket.setPriority(
+                priority != null ? priority : Priority.MEDIUM
+        );
+
+        // 🔹 requester (obligatoire)
         User requester = userRepo.findByEmail(requesterEmail);
+
         if (requester == null) {
+            // On crée automatiquement un user si l'email n'existe pas
             requester = new User();
             requester.setEmail(requesterEmail);
             requester.setFullName(requesterEmail);
-            userRepo.save(requester);
+
+            requester = userRepo.save(requester);
         }
 
-        Ticket t = new Ticket();
-        t.setTitle(title);
-        t.setDescription(description);
-        t.setPriority(priority != null ? priority : Priority.MEDIUM);
-        t.setStatus(Status.NEW);
-        t.setRequester(requester);
-        t.setCreatedAt(Instant.now());
-        t.setUpdatedAt(Instant.now());
+        ticket.setRequester(requester);
 
+
+        // assignee (optionnel)
         if (assigneeId != null) {
-            userRepo.findById(assigneeId).ifPresent(t::setAssignee);
+            User assignee = userRepo.findById(assigneeId)
+                    .orElseThrow(() -> new RuntimeException("Assignee not found: " + assigneeId));
+            ticket.setAssignee(assignee);
         }
 
-        return ticketRepo.save(t);
+        // groupe (optionnel)
+        if (groupId != null) {
+            Group group = groupRepo.findById(groupId)
+                    .orElseThrow(() -> new RuntimeException("Group not found: " + groupId));
+            ticket.setGroup(group);
+        }
+
+        return ticketRepo.save(ticket);
     }
 }

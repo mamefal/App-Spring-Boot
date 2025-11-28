@@ -1,6 +1,7 @@
 package com.example.ticketing.ui.controller;
 
 import com.example.ticketing.domain.Priority;
+import com.example.ticketing.repository.GroupRepo;
 import com.example.ticketing.repository.UserRepo;
 import com.example.ticketing.service.TicketService;
 import com.example.ticketing.ui.form.TicketForm;
@@ -18,6 +19,7 @@ public class TicketPageController {
 
     private final TicketService ticketService;
     private final UserRepo userRepo;
+    private final GroupRepo groupRepo;   // 👈 à injecter
 
     @GetMapping
     public String list(Model model) {
@@ -30,8 +32,17 @@ public class TicketPageController {
         model.addAttribute("ticketForm", new TicketForm());
         model.addAttribute("priorities", Priority.values());
         model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("groups", groupRepo.findAll());   // 👈 pour le select des groupes
         return "tickets/new";
     }
+
+    @GetMapping("/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        var ticket = ticketService.getById(id);
+        model.addAttribute("ticket", ticket);
+        return "tickets/show";
+    }
+
 
     @PostMapping
     public String create(@Valid @ModelAttribute("ticketForm") TicketForm form,
@@ -41,6 +52,7 @@ public class TicketPageController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("priorities", Priority.values());
             model.addAttribute("users", userRepo.findAll());
+            model.addAttribute("groups", groupRepo.findAll());
             return "tickets/new";
         }
 
@@ -50,9 +62,8 @@ public class TicketPageController {
                 form.getPriority(),
                 form.getRequesterEmail(),
                 form.getAssigneeId(),
-                null   // on branchera sur un vrai groupId plus tard
+                form.getGroupId()
         );
-
 
         return "redirect:/tickets";
     }

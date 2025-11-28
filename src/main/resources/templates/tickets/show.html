@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Détail ticket</title>
 </head>
 <body>
-$END$
+<h1 th:text="${ticket.title}">Titre</h1>
+
+<p><strong>Description :</strong> <span th:text="${ticket.description}">desc</span></p>
+<p><strong>Priorité :</strong> <span th:text="${ticket.priority}">prio</span></p>
+<p><strong>Groupe :</strong>
+  <span th:text="${ticket.group != null ? ticket.group.name : 'Aucun'}">groupe</span>
+</p>
+
+<a href="/tickets">Retour à la liste</a>
 </body>
 </html>

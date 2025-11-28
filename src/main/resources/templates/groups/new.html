@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Nouveau groupe</title>
@@ -7,18 +7,19 @@
 <body>
 <h1>Créer un groupe</h1>
 
-<form action="/groups" method="post">
+<form action="/groups" method="post" th:object="${groupForm}">
   <div>
     <label>Nom :</label>
-    <input type="text" name="name">
+    <input type="text" th:field="*{name}">
   </div>
   <div>
     <label>Description :</label>
-    <input type="text" name="description">
+    <input type="text" th:field="*{description}">
   </div>
+
   <button type="submit">Créer</button>
 </form>
 
-<a href="/groups">Retour</a>
+<a href="/groups">Retour à la liste</a>
 </body>
 </html>
